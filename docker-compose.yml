@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  restapi:
+    network_mode: host
+    restart: always
+    image: restapi-backend
+    build: .
+    links:
+      - mongo
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      MONGO_URI: mongodb://mongo:27017/admin
+      JWT_SECRET: clave-secreta
+    ports:
+      - 8080:8080
+  mongo:
+    image: mongo
+    ports:
+      - 27019:27017
