@@ -12,7 +12,7 @@ async function connectDb (exitOnFail = false) {
   }).catch((err) => {
     console.error('> Error while connecting to MongoDB database. Check our Database Server or Connection URI.')
     console.error(err)
-    if (exitOnFail) process.exit(0)
+    if (exitOnFail) process.exit(1)
   })
 }
 

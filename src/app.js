@@ -1,5 +1,5 @@
 /**
- * Definicion de constantes de libreries
+ * Definicion de modulos y constantes.
  */
 const { NODE_ENV } = require('./config/config')
 const compression = require('compression')
@@ -8,7 +8,6 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const logger = require('morgan')
 const fs = require('fs')
-const path = require('path')
 
 /** Definicion de constantes Middleware */
 const dbMiddleware = require('./app/middleware/dbConnection')
@@ -42,11 +41,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 /** Definimos un Middleware que bloquea las peticiones al estar desconectada la base de datos. */
 app.use(dbMiddleware)
-
-/** Definition of file serving route. */
-app.get('/public/:path', (req, res) => {
-  res.sendFile(express.static(path.resolve(`storage/imgs/${req.params.path}`))) // Guardado para despues..
-})
 
 /** Definimos la ruta del Favicon */
 app.get('/favicon.ico', (req, res) => res.sendStatus(204))

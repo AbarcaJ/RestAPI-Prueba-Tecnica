@@ -7,7 +7,7 @@ const isValidMethod = (validMethods = ['GET', 'HEAD']) => (req, res, next) => {
   res.header('Content-Type', 'application/problem+json')
   res.status(405).json({
     status: 'error',
-    message: `Method: ${req.method} is not allowed for this route.`,
+    message: `Method: ${req.method} is not allowed for this route.`
   })
 }
 

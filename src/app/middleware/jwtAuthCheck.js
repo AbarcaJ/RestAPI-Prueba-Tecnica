@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { JWT_SECRET } = require('../config/credentials')
-
+const { JWT_SECRET } = require('../../config/credentials')
 
 /** Middleware que verifica y permite la peticion si tiene una autorizacion valida.
  * De lo contrario devolvera (token faltante o expirado) => `status` error y `http_code` 401
@@ -18,7 +17,7 @@ const jwtValidator = (req, res, next) => {
         res.header('WWW-Authenticate', 'Bearer')
         res.status(401).json({
           status: 'error',
-          message: '[!] Invalid Token in our request, has expired or is not valid. [!]',
+          message: '[!] Invalid Token in our request, has expired or is not valid. [!]'
         })
         console.log(`> Authorization failed with Token: ${token} From: ${req.ip} Uri: /${req.path}`)
       } else {
@@ -32,7 +31,7 @@ const jwtValidator = (req, res, next) => {
     res.header('WWW-Authenticate', 'Bearer')
     res.status(401).json({
       status: 'error',
-      message: '[!] The request does not contain an authorization header with a valid token. [!]',
+      message: '[!] The request does not contain an authorization header with a valid token. [!]'
     })
     console.log(`> Nothing Authorization header has been sent from: ${req.ip} to uri: /${req.path}`)
   }
