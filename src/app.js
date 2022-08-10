@@ -11,7 +11,7 @@ const fs = require('fs')
 
 /** Definicion de constantes Middleware */
 const dbMiddleware = require('./app/middleware/dbConnection')
-const jwtAuthMiddleware = require('./app/middleware/jwtAuthCheck')
+const { isAuthorized } = require('./app/middleware/jwtAuth')
 
 /** Definicion de ExpresssJS */
 const app = express()
@@ -52,7 +52,7 @@ fs.readdirSync('./src/routes')
     const route = require(`./routes/${file}`)
     if (route.requiresAuth) {
       /* Podemos indicar que necesita autenticacion todas las rutas definidas en el archivo .js */
-      app.use(route.uri, jwtAuthMiddleware, route.router)
+      app.use(route.uri, isAuthorized, route.router)
     } else {
       /* Tambien podemos, registrar las rutas y solo indicar autenticacion a rutas en especifico
        * Desde el archivo .js

@@ -1,21 +1,17 @@
-const bcrypt = require('bcryptjs') /** Utilizamos bcryptjs para Encriptacion de contrasenas */
 const mongoose = require('mongoose')
 
-// const { appCfg } = require('/src/config')
-
-const { isEmail } = require('validator') /** Utilizamos validator, para Validaciones. */
+/** Utilizamos `bcryptjs` para Encriptacion de contrasenas */
+const bcrypt = require('bcryptjs')
 const SALT_WORK_FACTOR = 10
 
-const Schema = mongoose.Schema /** Definimos la const de Schame */
-const ObjectId = Schema.ObjectId /** Definimos la const del tipo de Dato ObjectID */
+/** Utilizamos validator, para Validaciones. */
+const { isEmail } = require('validator')
+
+/** Definimos la const de Schema */
+const Schema = mongoose.Schema
+// const ObjectId = Schema.ObjectId /** Definimos la const del tipo de Dato ObjectID */
 
 const UserSchema = Schema({
-  username: {
-    type: String,
-    trim: true,
-    required: true,
-    createIndexes: { unique: true }
-  },
   name: {
     type: String,
     required: true
@@ -27,30 +23,20 @@ const UserSchema = Schema({
   email: {
     type: String,
     required: true,
-    validate: [isEmail, 'invalid email']
+    validate: [isEmail, 'Invalid email!'],
+    createIndexes: { unique: true }
   },
   password: {
     type: String,
     required: true
   },
   role: {
-    type: Number,
-    // type: ObjectId,
-    // ref: 'Role',
-    required: false
-  },
-  user_photo: {
     type: String,
-    required: false
+    default: 'USER'
   },
-  active: {
-    type: Boolean,
+  inactive: {
+    type: String,
     default: false
-  },
-  updated_by: {
-    type: ObjectId,
-    ref: 'users',
-    required: false
   }
 }, {
   timestamps: true
@@ -67,8 +53,8 @@ UserSchema.pre('save', async (next) => {
   }
 })
 
-UserSchema.methods.validatePassword = async (data) => {
-  return bcrypt.compare(data, this.password)
+UserSchema.methods.validatePassword = async (password, cb) => {
+  return bcrypt.compare(password, this.password, cb)
 }
 
 /** Me parece mejor practica nombrar las colecciones en lowerCase */

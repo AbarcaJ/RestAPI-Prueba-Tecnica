@@ -4,7 +4,7 @@ const { JWT_SECRET } = require('../../config/credentials')
 /** Middleware que verifica y permite la peticion si tiene una autorizacion valida.
  * De lo contrario devolvera (token faltante o expirado) => `status` error y `http_code` 401
  */
-const jwtValidator = (req, res, next) => {
+const isAuthorized = (req, res, next) => {
   let token = req.headers.authorization
   if (token) {
     if (token.startsWith('Bearer')) {
@@ -37,4 +37,30 @@ const jwtValidator = (req, res, next) => {
   }
 }
 
-module.exports = jwtValidator
+const requiresRole = (validRoles = []) => (req, res, next) => {
+  if (req.tokenData && req.tokenData.role) {
+    if (validRoles.includes(req.tokenData.role)) {
+      return next()
+    }
+  }
+  res.header('Content-Type', 'application/problem+json')
+  res.status(403).json({
+    status: 'error',
+    message: 'Insufficient role to access to this resource.'
+  })
+}
+
+/** Generate new Access Token */
+const generateAccessToken = (jwtSecret, userData) => {
+  return jwt.sign(userData, jwtSecret, { expiresIn: '15m' })
+}
+
+/** Refresh Access Token */
+const refreshTokens = []
+const refreshAccessToken = (jwtSecret, userData) => {
+  const refreshToken = jwt.sign(userData, jwtSecret, { expiresIn: '20m' })
+  refreshTokens.push(refreshToken)
+  return refreshToken
+}
+
+module.exports = { isAuthorized, requiresRole, generateAccessToken, refreshAccessToken }
