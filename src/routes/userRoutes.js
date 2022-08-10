@@ -1,27 +1,24 @@
 const router = require('express').Router()
 const controller = require('../app/controllers/userController')
 const { isAuthorized, requiresRole } = require('../app/middleware/jwtAuth')
+const { onlyMethods } = require('../app/middleware/validateMethods')
 
-/** SOLO ADMINISTRADOR */
-router.get('/adminOnly', [isAuthorized, requiresRole(['ADMIN'])], controller.retrieveAll)
+router.all('/', onlyMethods(['HEAD', 'GET', 'POST', 'PUT', 'DELETE']))
 
-/** SOLO MODERADOR Y ADMIN */
-router.get('/modAndAdmin', [isAuthorized, requiresRole(['MOD', 'ADMIN'])], controller.retrieveAll)
+/** Listado de usuarios que solo puede ver el empleado o superior. */
+router.get('/', [isAuthorized, requiresRole(['EMPLOYEE', 'MOD', 'ADMIN'])], controller.retrieveAll)
 
-/** RUTA SIN LOGIN REQUERIDO */
-router.get('/', controller.retrieveAll)
-
-/** CRUD BASICO
- * Aclaro que estas funciones solo son demostrativas por lo cual necesitan validaciones como:
- *  El usuario solo pueda actualizar sus propios datos o si es un administrador permitirlo.
+/** CRUD
+ * Estas funciones solo son demostrativas por lo cual podrian incluirse
+ *  Mas validaciones a la hora de intentar modificar un registro.
+ *  Dependiendo si las peticiones se ejecutan de lado de servidor o cliente.
  */
 router.post('/', controller.create)
-router.get('/:id', controller.retrieve)
+router.get('/:id', isAuthorized, controller.retrieve)
 router.put('/:id', isAuthorized, controller.update)
-router.delete('/:id', isAuthorized, controller.delete)
+router.delete('/:id', [isAuthorized, requiresRole(['MOD', 'ADMIN'])], controller.delete)
 
 module.exports = {
-  requiresAuth: false,
-  uri: '/v1/users',
+  uri: '/api/v1/users',
   router
 }

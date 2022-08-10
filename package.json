@@ -6,8 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production && node ./src/server.js",
     "lint": "standard --fix",
-    "dev": "cross-env NODE_ENV=development && nodemon ./src/server.js",
-    "test": "cross-env NODE_ENV=test && jest --verbose --runInBand --detectOpenHandles --forceExit --silent"
+    "dev": "cross-env NODE_ENV=development && nodemon ./src/server.js"
   },
   "repository": {
     "type": "git",

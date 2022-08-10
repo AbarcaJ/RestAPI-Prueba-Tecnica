@@ -30,32 +30,36 @@ const UserSchema = Schema({
     type: String,
     required: true
   },
+  /* De forma demostrativa no pondre roles por relacion con otra coleccion
+  * Simplemente pondre un solo campo para el rol, que demostrativo y segun el caso
+  * a veces suele ser suficiente dependiendo el sistema que se desea desarrollar.
+  */
   role: {
     type: String,
     default: 'USER'
   },
   inactive: {
-    type: String,
+    type: Boolean,
     default: false
   }
 }, {
   timestamps: true
 })
 
-UserSchema.pre('save', async (next) => {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next()
   try {
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
-    this.password = bcrypt.hash(this.password, salt)
+    this.password = bcrypt.hashSync(this.password, salt)
     return next()
   } catch (err) {
     return next(err)
   }
 })
 
-UserSchema.methods.validatePassword = async (password, cb) => {
+UserSchema.methods.validatePassword = async function (password, cb) {
   return bcrypt.compare(password, this.password, cb)
 }
 
-/** Me parece mejor practica nombrar las colecciones en lowerCase */
+/** Es mejor practica nombrar las colecciones en lowerCase */
 module.exports = mongoose.model('users', UserSchema)

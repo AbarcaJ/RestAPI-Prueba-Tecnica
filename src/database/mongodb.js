@@ -10,7 +10,7 @@ async function connectDb (exitOnFail = false) {
   await mongoose.connect(MONGO_URI, MONGO_OPTIONS).then(() => {
     console.log('> MongoDB was connected sucessfully!')
   }).catch((err) => {
-    console.error('> Error while connecting to MongoDB database. Check our Database Server or Connection URI.')
+    console.error('> Error while connecting to MongoDB database. Check our Database Server.')
     console.error(err)
     if (exitOnFail) process.exit(1)
   })

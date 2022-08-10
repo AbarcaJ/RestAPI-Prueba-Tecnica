@@ -11,7 +11,6 @@ const fs = require('fs')
 
 /** Definicion de constantes Middleware */
 const dbMiddleware = require('./app/middleware/dbConnection')
-const { isAuthorized } = require('./app/middleware/jwtAuth')
 
 /** Definicion de ExpresssJS */
 const app = express()
@@ -50,15 +49,7 @@ fs.readdirSync('./src/routes')
   .filter(file => (file.indexOf('.') !== 0) && (file.slice(-3) === '.js'))
   .forEach(file => {
     const route = require(`./routes/${file}`)
-    if (route.requiresAuth) {
-      /* Podemos indicar que necesita autenticacion todas las rutas definidas en el archivo .js */
-      app.use(route.uri, isAuthorized, route.router)
-    } else {
-      /* Tambien podemos, registrar las rutas y solo indicar autenticacion a rutas en especifico
-       * Desde el archivo .js
-      */
-      app.use(route.uri, route.router)
-    }
+    app.use(route.uri, route.router)
   })
 
 /**
@@ -72,10 +63,10 @@ app.use((req, res, next) => {
 })
 
 /**
- * Manejo de errores finales.
+ * Manejo de errores finales de peticion.
  */
 app.use((err, req, res, next) => {
-  const status = err.status
+  let status = err.status
   res.header('Content-Type', 'application/problem+json')
   if (status === 404) {
     res.status(404).json({ status: 'error', message: 'The requested resource could not be found!' })
@@ -83,6 +74,9 @@ app.use((err, req, res, next) => {
     console.error(err)
     res.status(status).json({ status: 'error', message: '[!] Internal server error [!]' })
   } else {
+    if (!status) {
+      status = 500
+    }
     if (NODE_ENV === 'development') {
       res.status(status).json({ status: 'error', message: 'Something looks wrong :( !!!', err: err.message })
     } else {

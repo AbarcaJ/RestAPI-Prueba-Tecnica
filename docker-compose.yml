@@ -13,6 +13,7 @@ services:
       PORT: 8080
       MONGO_URI: mongodb://mongo:27017/admin
       JWT_SECRET: clave-secreta
+      JWT_REFRESH_SECRET: clave-screta-de-refrescar
     ports:
       - 8080:8080
   mongo:

@@ -8,10 +8,9 @@ const validateConnection = (req, res, next) => {
   if (mongoose.connection.readyState !== 1) {
     const err = new Error('Database connection is not established')
     err.status = 500
-    next(err)
-  } else {
-    next()
+    return next(err)
   }
+  next()
 }
 
 module.exports = validateConnection
