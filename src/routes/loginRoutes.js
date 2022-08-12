@@ -1,14 +1,18 @@
 const router = require('express').Router()
-const controller = require('../app/controllers/loginController')
+const {
+  loginUser,
+  refreshUserToken,
+  deleteUserToken
+} = require('../app/controllers/loginController')
 
 /** Obtener token iniciando sesion */
-router.post('/signIn', controller.login)
+router.post('/signIn', loginUser)
 
 /** Refrescar token */
-router.post('/refreshToken', controller.refreshToken)
+router.post('/refreshToken', refreshUserToken)
 
 /** Eliminar token de refrescar */
-router.post('/logout', controller.deleteToken)
+router.post('/logout', deleteUserToken)
 
 module.exports = {
   uri: '/api/v1/auth',
