@@ -1,3 +1,480 @@
 {
-    
-}
+    "openapi": "3.0.0",
+    "info": {
+        "description": "Documentacion con Swagger",
+        "version": "1.0.0",
+        "title": "RestAPI Prueba Backend",
+        "contact": {
+            "name": "Jose Abarca",
+            "email": "josemiguelabarcamedina2001@gmail.com",
+            "url": "https://github.com/KabaSys/RestAPI-Prueba-Tecnica"
+        }
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8080/api/v1",
+        "variables": {}
+      }
+    ],
+    "paths": {
+      "/users": {
+        "post": {
+          "tags": [
+            "Usuarios"
+          ],
+          "summary": "Crear Usuario",
+          "operationId": "CreateUser",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "encoding": {},
+                "schema": {
+                  "required": [
+                    "name",
+                    "lastname",
+                    "email",
+                    "password"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Nombre"
+                    },
+                    "lastname": {
+                      "type": "string",
+                      "description": "Apellido"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "Correo"
+                    },
+                    "password": {
+                      "type": "string",
+                      "description": "Contraseña"
+                    }
+                  }
+                }
+              }
+            },
+            "required": false
+          },
+          "responses": {
+            "200": {
+              "description": "status: 'success', message: 'Created successfully!!!', data: 'user info'"
+            },
+            "400": {
+                "description": "status: 'error', message: 'Bad request. Missing fields !'"
+            },
+            "409": {
+                "description": "status: 'error', message: 'The email already exists in the database'"
+            },
+            "500": {
+                "description": "status: 'error', message: 'Something looks wrong!!! or Data was no saved!'"
+            }
+          },
+          "deprecated": false
+        },
+        "get": {
+          "tags": [
+            "Usuarios"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ],
+          "summary": "Listado de Usuarios",
+          "operationId": "ListUsers",
+          "parameters": [],
+          "responses": {
+            "200": {
+                "description": "status: 'success', message: 'Data found successfully!!', data: 'users info'"
+            },
+            "404": {
+                "description": "status: 'error', message: 'Data not found.'"
+            },
+            "500": {
+                "description": "status: 'error', message: 'Something looks wrong!!'"
+            }
+          },
+          "deprecated": false
+        }
+      },
+      "/users/{id}": {
+        "get": {
+          "tags": [
+            "Usuarios"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ],
+          "summary": "Obtener Usuario",
+          "operationId": "RetrieveUser",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID del usuario",
+              "required": true,
+              "style": "simple",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+                "description": "status: 'success', message: 'Retrieved successfully!', data: 'user info'"
+            },
+            "403": {
+                "description": "status: 'error', message: 'You only can retrieve the information for you own user.'"
+            },
+            "404": {
+                "description": "status: 'error', message: 'Data not found.'"
+            },
+            "500": {
+                "description": "status: 'error', message: 'Something looks wrong!!'"
+            }
+          },
+          "deprecated": false
+        },
+        "put": {
+          "tags": [
+            "Usuarios"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ],
+          "summary": "Actualizar Usuario",
+          "operationId": "UpdateUser",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID del Usuario",
+              "required": true,
+              "style": "simple",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "encoding": {},
+                "schema": {
+                  "required": [
+                    "name",
+                    "lastname",
+                    "email",
+                    "password",
+                    "role",
+                    "inactive"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Actualizar nombre"
+                    },
+                    "lastname": {
+                      "type": "string",
+                      "description": "Actualizar apellido"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "Actualizar correo"
+                    },
+                    "password": {
+                      "type": "string",
+                      "description": "Actualizar contraseña"
+                    },
+                    "role": {
+                      "type": "string",
+                      "description": "Actualizar rol"
+                    },
+                    "inactive": {
+                      "type": "string",
+                      "description": "Actualizar activo"
+                    }
+                  }
+                }
+              }
+            },
+            "required": false
+          },
+          "responses": {
+            "200": {
+                "description": "status: 'success', message: 'Retrieved successfully!', data: 'user info'"
+            },
+            "403": {
+                "description": "status: 'error', message: 'You only can update the information for you own user.'"
+            },
+            "404": {
+                "description": "status: 'error', message: 'Data not found.'"
+            },
+            "500": {
+                "description": "status: 'error', message: 'Something looks wrong!!'"
+            }
+          },
+          "deprecated": false
+        },
+        "delete": {
+          "tags": [
+            "Usuarios"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ],
+          "summary": "Eliminar usuario",
+          "operationId": "DeleteUser",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID del usuario",
+              "required": true,
+              "style": "simple",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+                "description": "status: 'success', message: 'Deleted successfully!'"
+            },
+            "404": {
+                "description": "status: 'error', message: 'Data not found.'"
+            },
+            "500": {
+                "description": "status: 'error', message: 'Something looks wrong!!'"
+            }
+          },
+          "deprecated": false
+        }
+      },
+      "/airplanes": {
+        "post": {
+          "tags": [
+            "Aviones"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ],
+          "summary": "Crear Avion",
+          "operationId": "CreateAirplane",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "encoding": {},
+                "schema": {
+                  "required": [
+                    "name",
+                    "type",
+                    "releaseDate",
+                    "status"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Nombre"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Tipo"
+                    },
+                    "releaseDate": {
+                      "type": "string",
+                      "description": "Fecha Lanzamiento"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Estado actual"
+                    }
+                  }
+                }
+              }
+            },
+            "required": false
+          },
+          "responses": {
+            "200": {
+                "description": "status: 'success', message: 'Created successfully!!!', data: 'airplane info'"
+            },
+            "400": {
+                "description": "status: 'error', message: 'Bad request. Missing fields !'"
+            },
+            "500": {
+                "description": "status: 'error', message: 'Something looks wrong!! or Data was no saved!'"
+            }
+          },
+          "deprecated": false
+        },
+        "get": {
+          "tags": [
+            "Aviones"
+          ],
+          "summary": "Listado de Aviones",
+          "operationId": "ListAirplanes",
+          "parameters": [],
+          "responses": {
+            "200": {
+                "description": "status: 'success', message: 'Data found successfully!!', data: 'airplanes info'"
+            },
+            "404": {
+                "description": "status: 'error', message: 'Data not found.'"
+            },
+            "500": {
+                "description": "status: 'error', message: 'Something looks wrong!!'"
+            }
+          },
+          "deprecated": false
+        }
+      },
+      "/airplanes/{id}": {
+        "get": {
+          "tags": [
+            "Aviones"
+          ],
+          "summary": "Obtener Avion",
+          "operationId": "RetrieveAirplane",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID del Avion",
+              "required": true,
+              "style": "simple",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+                "description": "status: 'success', message: 'Retrieved successfully!', data: 'airplane info'"
+            },
+            "404": {
+                "description": "status: 'error', message: 'Data not found.'"
+            },
+            "500": {
+                "description": "status: 'error', message: 'Something looks wrong!!'"
+            }
+          },
+          "deprecated": false
+        }
+      },
+      "/auth/signIn": {
+        "post": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "Login",
+          "operationId": "Login",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "encoding": {},
+                "schema": {
+                  "required": [
+                    "email",
+                    "password"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "description": "Correo del usuario"
+                    },
+                    "password": {
+                      "type": "string",
+                      "description": "Contraseña del usuario"
+                    }
+                  }
+                }
+              }
+            },
+            "required": false
+          },
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          },
+          "deprecated": false
+        }
+      },
+      "/auth/refreshToken": {
+        "post": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "Refrescar Token",
+          "operationId": "RefreshToken",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          },
+          "deprecated": false
+        }
+      },
+      "/auth/logout": {
+        "post": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "Invalidar Refresh Token",
+          "operationId": "Logout",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          },
+          "deprecated": false
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearer": {
+          "type": "http",
+          "scheme": "bearer"
+        }
+      }
+    },
+    "tags": [
+        {
+        "name": "Auth",
+        "description": "RUTAS DE FLUJO DE AUTENTICACION."
+      },
+      {
+        "name": "Usuarios",
+        "description": "CRUD BASICO DE USUARIOS."
+      },
+      {
+        "name": "Aviones",
+        "description": "RUTAS BASICAS PARA REGISTRAR Y OBTENER AVIONES."
+      }
+    ]
+  }
