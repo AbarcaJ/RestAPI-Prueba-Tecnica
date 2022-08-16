@@ -14,21 +14,21 @@ const Schema = mongoose.Schema
 const UserSchema = Schema({
   name: {
     type: String,
-    required: true
+    required: [true, 'An name is required!']
   },
   lastname: {
     type: String,
-    required: true
+    required: [true, 'An lastname is required!']
   },
   email: {
     type: String,
     required: true,
-    validate: [isEmail, 'Invalid email!'],
+    validate: [isEmail, 'Invalid was specified email!'],
     createIndexes: { unique: true }
   },
   password: {
     type: String,
-    required: true
+    required: [true, 'An password is required!']
   },
   /* De forma demostrativa no pondre roles por relacion con otra coleccion
   * Simplemente pondre un solo campo para el rol, que demostrativo y segun el caso
@@ -37,6 +37,9 @@ const UserSchema = Schema({
   role: {
     type: String,
     default: 'USER'
+  },
+  refresh_token: {
+    type: String
   },
   inactive: {
     type: Boolean,

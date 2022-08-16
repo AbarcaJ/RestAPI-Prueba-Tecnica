@@ -5,28 +5,19 @@ const { NODE_ENV } = require('./config/config')
 const compression = require('compression')
 const express = require('express')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const cors = require('cors')
+const corsOptions = require('./config/corsOptions')
 const logger = require('morgan')
 const fs = require('fs')
 
 /** Definicion de constantes Middleware */
 const dbMiddleware = require('./app/middleware/dbConnection')
+const credentialsMiddleware = require('./app/middleware/credentials')
 
 /** Definicion de ExpresssJS */
 const app = express()
-
-/**
- * Definicion de Reglas Globales para las peticiones a Express.
- */
-app.use(compression()) /** Esto podria ayudar comprimiendo los cuerpos de respuesta */
 app.disable('x-powered-by') /* Eliminamos la Marca de Agua de ExpressJS | Powered-by Brand. */
-
-/* Aplicamos la CORS Policy. */
-const corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200
-}
-app.use(cors(corsOptions))
 
 /* Usamos Morgan como Logger de Peticiones para Express. */
 app.use(logger(NODE_ENV === 'development'
@@ -34,9 +25,24 @@ app.use(logger(NODE_ENV === 'development'
   : 'tiny')
 )
 
+/**
+ * Definicion de Reglas Globales para las peticiones a Express.
+ */
+app.use(compression()) /** Esto podria ayudar comprimiendo los cuerpos de respuesta */
+
+/**
+ * Hacemos un handling de credenciales antes del CORS.
+ * Luego buscamos la cookies de los credenciales requeridos.
+ */
+app.use(credentialsMiddleware)
+
+/* Aplicamos la CORS Policy. */
+app.use(cors(corsOptions))
+
 /* Usamos body-parser para obtener los datos de peticiones JSON o URLENCODED. */
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser()) /* Usamos cookie-parser para manejo de Cookies */
 
 /** Definimos un Middleware que bloquea las peticiones al estar desconectada la base de datos. */
 app.use(dbMiddleware)

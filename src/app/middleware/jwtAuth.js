@@ -69,28 +69,13 @@ const generateAccessToken = (userData) => {
 }
 
 /** Generar un nuevo Access Token para Refrescar */
-const refreshTokens = []
-const refreshAccessToken = (userData) => {
-  const refreshToken = jwt.sign(userData, JWT_REFRESH_SECRET, { expiresIn: '20m' })
-  refreshTokens.push(refreshToken)
-  return refreshToken
-}
-
-/** Verificar si existe el Token de Refrescar */
-const existsRefreshToken = (refreshToken) => {
-  return refreshTokens.includes(refreshToken)
-}
-
-/** Eliminar un Refresh Token */
-const deleteRefreshToken = (refreshToken) => {
-  refreshTokens.filter((t) => t !== refreshToken)
+const generateRefreshToken = (userData) => {
+  return jwt.sign(userData, JWT_REFRESH_SECRET, { expiresIn: '24h' })
 }
 
 module.exports = {
   isAuthorized,
   requiresRole,
   generateAccessToken,
-  refreshAccessToken,
-  existsRefreshToken,
-  deleteRefreshToken
+  generateRefreshToken
 }
